@@ -46,14 +46,13 @@ if result != vrep.simx_return_ok:
 nominalLinearVelocity=0.15
 wheelRadius=0.027
 interWheelDistance=0.119
-"""TODO: Turn these to python syntax"""
+
 '''
 # Print object name list
 result,joint_name,intData,floatData,stringData = vrep.simxGetObjectGroupData(clientID,vrep.sim_appobj_object_type,0,vrep.simx_opmode_blocking)
 print(stringData)
 '''
 
-"""TODO: CHANGE BELOW TO PYTHON SYNTAX"""
 vrep.simxStartSimulation(clientID, vrep.simx_opmode_oneshot)
 while(1):
     """ Read the sensors:"""
