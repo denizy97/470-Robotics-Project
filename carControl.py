@@ -42,20 +42,23 @@ if result != vrep.simx_return_ok:
 result, rightJointDynamic=vrep.simxGetObjectHandle(clientID, "DynamicRightJoint", vrep.simx_opmode_blocking)
 if result != vrep.simx_return_ok:
 	raise Exception('could not get object handle for DynamicRightJoint')
-
+result, laserSensor=vrep.simxGetObjectHandle(clientID, "LaserPointer_sensor", vrep.simx_opmode_blocking)
+if result != vrep.simx_return_ok:
+	raise Exception('could not get object handle for Laser Sensor')
 nominalLinearVelocity=0.15
 wheelRadius=0.027
 interWheelDistance=0.119
-
 '''
 # Print object name list
 result,joint_name,intData,floatData,stringData = vrep.simxGetObjectGroupData(clientID,vrep.sim_appobj_object_type,0,vrep.simx_opmode_blocking)
 print(stringData)
 '''
-
 vrep.simxStartSimulation(clientID, vrep.simx_opmode_oneshot)
 while(1):
     """ Read the sensors:"""
+    dist = (-1,-1)
+    olddist = dist[1]
+    dist = vrep.simxGetFloatSignal(clientID, "laserPointerData", vrep.simx_opmode_streaming)
     sensorReading=[False,False,False]
     sensorReading[0]=(vrep.simxReadVisionSensor(clientID, leftSensor, vrep.simx_opmode_oneshot)[1]==1)
     sensorReading[1]=(vrep.simxReadVisionSensor(clientID, middleSensor, vrep.simx_opmode_oneshot)[1]==1)
@@ -70,6 +73,14 @@ while(1):
             vrep.simxSetJointTargetVelocity(clientID, leftJointDynamic, linearVelocityLeft/(wheelRadius), vrep.simx_opmode_oneshot)
             vrep.simxSetJointTargetVelocity(clientID, rightJointDynamic, linearVelocityRight/(wheelRadius), vrep.simx_opmode_oneshot)
             break
+    if dist[0] == 0:
+        while dist[1] < 0.1:
+            linearVelocityRight=0
+            linearVelocityLeft=0
+            vrep.simxSetJointTargetVelocity(clientID, leftJointDynamic, linearVelocityLeft/(wheelRadius), vrep.simx_opmode_oneshot)
+            vrep.simxSetJointTargetVelocity(clientID, rightJointDynamic, linearVelocityRight/(wheelRadius), vrep.simx_opmode_oneshot)
+            dist = vrep.simxGetFloatSignal(clientID, "laserPointerData", vrep.simx_opmode_buffer)
+            time.sleep(1)
     # Set the sensor indicators:
     # Decide about left and right velocities:
     linearVelocityLeft=nominalLinearVelocity
@@ -83,7 +94,7 @@ while(1):
     vrep.simxSetJointTargetVelocity(clientID, rightJointDynamic, linearVelocityRight/(wheelRadius), vrep.simx_opmode_oneshot)
 
 # Wait two seconds
-time.sleep(5)
+time.sleep(2)
 # **************************************************************************************************** #
 
 # Stop simulation
