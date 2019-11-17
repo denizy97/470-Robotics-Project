@@ -16,3 +16,6 @@ Note that the other files in this commit/update are used to setup the V-Rep pyth
 ## Project Update 3
 The main file relevant to this update is: `carControl.py`. This file contains all new code for control of the car module as well as code to control the arm for this update. In this update, we added code to handle the new sensors that we added for this update. In particular, we added code to use sensor readings from the sensor mounted on the car to tell the car when to stop. Effectively, this would allow the car to stop if it detects that there is an obstacle directly in front of it that is too close. We also added code to tell when the arm should remove the obstacle from the car's path. This was done by using an additional sensor to detect when the car had reached our first checkpoint. Finally, we added the necessary code to actually perform the removal of the obstacle by the arm.
 For future updates we plan to split off the code for the arm into its own file and we also plan to design a more dynamic system for removal of obstacles. Additionally, we want to implement a more complex course for the care to traverse. We want this course to contain multiple turns and obstacles that must be either avoided or removed.
+
+## Project Update 4
+FILL THIS IN
