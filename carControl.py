@@ -74,7 +74,7 @@ while(1):
             vrep.simxSetJointTargetVelocity(clientID, rightJointDynamic, linearVelocityRight/(wheelRadius), vrep.simx_opmode_oneshot)
             break
     if dist[0] == 0:
-        while dist[1] < 0.1:
+        while dist[1] < 0.15:
             linearVelocityRight=0
             linearVelocityLeft=0
             vrep.simxSetJointTargetVelocity(clientID, leftJointDynamic, linearVelocityLeft/(wheelRadius), vrep.simx_opmode_oneshot)
